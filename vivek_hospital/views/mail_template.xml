@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Email template for appoiment confirmation -->
+        <record id="email_template_appoiment_confirmation1" model="mail.template">
+            <field name="name">appoiment Confirmation</field>
+            <field name="model_id" ref="model_vivek_hospital_appoiment"/>
+            <field name="subject">appoiment Confirmation - {{ object.appoiment_id }}</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="email_to">{{ object.patient_id.email or '' }}</field>
+
+            <field name="body_html" type="html">
+<table border="0" cellpadding="0" cellspacing="0" style="padding-top:16px; background-color:#F1F1F1; font-family:Verdana, Arial,sans-serif; color:#454748; width:100%; border-collapse:separate;">
+<tr><td align="center">
+
+<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding:16px; background-color:white; color:#454748; border-collapse:separate;">
+<tbody>
+    <!-- HEADER -->
+    <tr>
+        <td align="center">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color:white; padding:0px 8px 0px 8px; border-collapse:separate;">
+                <tr>
+                    <td valign="middle">
+                        <span style="font-size:10px;">Your appoiment</span><br/>
+                        <span style="font-size:20px; font-weight:bold;">
+                            <t t-out="object.patient_id.name or ''">Patient Name</t>
+                        </span>
+                    </td>
+                    <td valign="middle" align="right">
+                        <img t-attf-src="/logo.png?company={{ object.company_id.id }}" style="height:auto;width:80px;" t-att-alt="object.company_id.name"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align:center;">
+                        <hr width="100%" style="background-color:rgb(204,204,204); border:none; margin:16px 0;"/>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <!-- CONTENT -->
+    <tr>
+        <td align="center">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color:white; padding:0px 8px 0px 8px; border-collapse:separate;">
+                <tr>
+                    <td valign="top" style="font-size:13px;">
+                        <div>
+                            Dear <t t-out="object.patient_id.name or ''">Patient Name</t>,<br/><br/>
+                            Your appoiment has been confirmed successfully. Here are the details:<br/><br/>
+
+                            <table border="1" cellpadding="6" cellspacing="0" width="100%" style="border-collapse:collapse;">
+                                <tr>
+                                    <td><strong>appoiment ID</strong></td>
+                                    <td><t t-out="object.appoiment_id or ''"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Doctor</strong></td>
+                                    <td><t t-out="object.doctor_id.name or ''"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Date  Time</strong></td>
+                                    <td><t t-out="object.appoiment_time or ''"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Booking Date</strong></td>
+                                    <td><t t-out="object.booking_date or ''"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Priority</strong></td>
+                                    <td><t t-out="object.priority or ''"/></td>
+                                </tr>
+                            </table>
+
+                            <t t-if="object.prechription">
+                                <p><strong>prechription:</strong></p>
+                                <div><t t-out="object.prechription"/></div>
+                            </t>
+
+                            <p style="margin-top:20px;">
+                                Thank you for choosing <t t-out="object.company_id.name or ''"/>!
+                            </p>
+
+                            <p>
+                                Regards,<br/>
+                                <t t-out="object.company_id.name or ''"/>
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;">
+                        <hr width="100%" style="background-color:rgb(204,204,204); border:none; margin:16px 0;"/>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <!-- FOOTER -->
+    <tr>
+        <td align="center">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color:white; font-size:11px; padding:0px 8px 0px 8px; border-collapse:separate;">
+                <tr>
+                    <td valign="middle" align="left">
+                        <t t-out="object.company_id.name or ''">YourCompany</t>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" align="left" style="opacity:0.7;">
+                        <t t-out="object.company_id.phone or ''">+1 650-123-4567</t>
+                        <t t-if="object.company_id.email">
+                            | <a t-att-href="'mailto:%s' % object.company_id.email" style="text-decoration:none;color:#454748;" t-out="object.company_id.email or ''">info@yourcompany.com</a>
+                        </t>
+                        <t t-if="object.company_id.website">
+                            | <a t-att-href="'%s' % object.company_id.website" style="text-decoration:none;color:#454748;" t-out="object.company_id.website or ''">http://www.example.com</a>
+                        </t>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</tbody>
+</table>
+
+</td></tr>
+<!-- POWERED BY -->
+<tr><td align="center">
+    <table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color:#F1F1F1; color:#454748; padding:8px; border-collapse:separate;">
+        <tr><td style="text-align:center; font-size:13px;">
+            Powered by <a target="_blank" href="https://www.odoo.com?utm_source=db&amp;utm_medium=auth" style="color:#875A7B;">Odoo</a>
+        </td></tr>
+    </table>
+</td></tr>
+</table>
+            </field>
+
+            
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

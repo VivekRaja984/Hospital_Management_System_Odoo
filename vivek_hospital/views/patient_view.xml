@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_vivek_hospital_patient_kanban" model="ir.ui.view">
+        <field name="name">vivek_hospital.patient_kanban</field>
+        <field name="model">vivek.hospital.patient</field>
+        <field name="arch" type="xml">
+        <kanban>
+             <field name="id"/>
+            <field name="name"/>
+            <field name="age"/>
+            <field name="gender"/>
+            <field name="marital_status"/>
+            <field name="image"/>
+            <templates>
+               <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click oe_kanban_card">
+                        <div class="o_kanban_image">
+                            <img t-att-src="kanban_image('vivek.hospital.patient','image',record.id.raw_value)" class="img img-fluid"/>
+                        </div>
+
+                        <div class="o_kanban_details">
+                            <strong><t t-esc="record.name.value"/></strong><br/>
+                            <span>Age: <t t-esc="record.age.value"/></span><br/>        
+                            <span>Gender: <t t-esc="record.gender.value"/></span><br/>
+                            <span>Marital Status: <t t-esc="record.marital_status.value"/></span>
+                        </div>
+                    </div>
+                </t>
+
+            </templates>    
+        </kanban>    
+        </field>
+
+    </record>
+
+    <record id="view_vivek_hospital_patient_tree" model="ir.ui.view">
+        <field name="name">vivek_hospital.patient_tree</field>
+        <field name="model">vivek.hospital.patient</field>
+        <field name="arch" type="xml">
+            <tree sample="1" export_xlsx="0">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="dob"/>
+                <field name="appoiment_count" sum="Total Appointments"/>
+                <field name="ref"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="age" avg="Average Age"/>
+                <field name="gender"/>
+            </tree>
+            </field>
+    </record>
+
+    <record id="view_vivek_hospital_patient_form_m" model="ir.ui.view">
+        <field name="name">vivek_hospital.patient_form</field>
+        <field name="model">vivek.hospital.patient</field>
+        <field name="arch" type="xml">
+            <form>
+                
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_appointments" icon="fa-star" >
+                            <div class="o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="appoiment_count"/>
+                            </span>
+                            <span class="o_stat_text">
+                                Appointments
+                            </span>
+                        </div>
+                        </button>
+                    </div>
+                    <div class="alert alert-info text-center o_form_header" role="alert"
+                    attrs="{'invisible': [('is_birthday','=',False)]}">
+                        <strong>Happy Birthday &#127874; &#127881; &#127880;!  </strong> 
+                        <b>  <field name="name" readonly="1"/>
+                        Wishing you a day filled with love and cheer!</b>
+                    </div>
+                    <field name="image" widget="image" class="oe_avatar"  />
+                    <div class="oe_title">
+                        <h3>
+                            <field name="ref" placeholder="Patient Reference..." readonly="1"/>
+                        </h3>
+                        <h1>
+                            <label for="name" class="oe_edit_only"/>
+                            <field name="name" placeholder="Patient Name..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="dob"/>
+                            <field name="age"/>
+                        </group>
+                        <group>
+                            <field name="gender" invisible="context.get('hide_gender')" widget="radio"/>
+                            <field name="active" invisible="1"/>
+                            <field name="appoiment_count"/>
+                            <field name="tag_ids" widget="many2many_checkboxes" options="{'color_field': 'color'}"/>
+                            <field name="is_birthday" invisible="1"/>
+                        </group>
+                        <group string="Additional Info">
+                            <field name="parent" attrs="{'invisible': [('age', '>', 18)]}"/>
+                            <field name="marital_status"/>
+                            <field name="partner_name" attrs="{'invisible': [('marital_status','!=', 'married')], 
+                                                'required': [('marital_status','=', 'married')]}"/>
+                            
+                        </group>
+                        <group string="Contact Info">
+                            <field name="phone" widget="phone"/>
+                            <field name="email" widget="email"/>
+                            <field name="website" widget="url"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+     <record id="view_vivek_hospital_patient_search_m" model="ir.ui.view">
+        <field name="name">vivek_hospital.patient_search</field>
+        <field name="model">vivek.hospital.patient</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" filter_domain="[('name','ilike',self)]"/>
+                <field name="age"/>
+                <field name="gender"/>
+                <filter name="filter_male" string="Male" domain="[('gender','=','male')]"/>
+                <filter name="filter_female" string="Female" domain="[('gender','=','female')]"/>
+               
+                <separator />
+                <filter name="filter_archived" string="Not Active" domain="[('active','=',False)]"/>
+                <group expand="0" string="Group">
+                    <filter name="group_by_gender" string="Group by Gender" context="{'group_by':'gender'}"/>
+                </group>
+                <searchpanel>
+                    <field name="gender" icon="fa-users" select="multi" enable_counters="1"/>
+                </searchpanel>
+        
+            </search>
+            </field>
+    </record>
+    
+
+
+    <record id="action_vivek_hospital_patient" model="ir.actions.act_window">
+        <field name="name">Patient</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">vivek.hospital.patient</field>
+        <field name="view_mode">tree,kanban,form</field>
+       
+        <field name="search_view_id" ref="view_vivek_hospital_patient_search_m"/>
+        <field name="context">{'search_default_filter_male':1,'search_default_group_by_gender':1}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_smilling_face">
+                Click to create a new patient record.
+            </p>
+        </field>
+    </record>
+    
+    <menuitem  id="menu_vivek_hospital_pdetails" 
+    name="Patient Details" 
+    sequence="10"
+    parent="menu_vivek_hospital_patient" 
+    action="action_vivek_hospital_patient" />
+
+</odoo>

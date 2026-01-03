@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_vivek_hospital_patient_template">
+
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+
+                    <div class="page">
+
+                        <!-- ===== TITLE ===== -->
+                        <div class="text-center mb-4">
+                            <h2>Patient Report</h2>
+                        </div>
+
+                        <!-- ===== PATIENT DETAILS ===== -->
+                        <div class="row border p-3 mb-4">
+
+                            <!-- IMAGE -->
+                            <div class="col-3 text-center">
+                                <img t-if="o.image"
+                                     t-att-src="'data:image/png;base64,%s' % to_text(o.image)"
+                                     class="img-thumbnail"
+                                     style="height:140px; width:120px;"/>
+
+                                <img t-if="not o.image"
+                                     t-att-src="'/web/static/img/placeholder.png'"
+                                     class="img-thumbnail"
+                                     style="height:140px; width:120px;"/>
+                            </div>
+
+                            <!-- INFO -->
+                            <div class="col-9">
+                                <table class="table table-borderless mb-0">
+                                    <tr>
+                                        <th class="w-25">Name</th>
+                                        <td><t t-esc="o.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Age</th>
+                                        <td><t t-esc="o.age"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Gender</th>
+                                        <td><t t-esc="o.gender"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div>
+                            <img t-att-src="'report/barcode/QR/'+o.name" style="height:100px; width:100px;" alt="Barcode"/>
+                        </div><br/>
+                        <div>
+                           <span t-field="o.name" t-options="{'widget': 'barcode','height': 200, 'width': 500}"/>
+                        </div><br/>
+                        <a t-att-href="o.website if o.website else '#'">
+                            Website
+                         </a>
+                    </div>
+                    <div class="page" style="page-break-before: always;" >
+                        <!-- ===== APPOINTMENTS ===== -->
+                        <t t-if="o.appoiment_ids">
+
+                            <h4 class="border-bottom pb-2 mb-3">
+                                Appointments
+                            </h4>
+
+                            <table class="table table-sm table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>SRNO.</th>
+                                        <th>Reference</th>
+                                        <th>Date</th>
+                                        <th>State</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="appointments_count" t-value="0"/>
+
+                                    <t t-foreach="o.appoiment_ids" t-as="line">
+                                        <t t-set="appointments_count"
+                                           t-value="appointments_count + 1"/>
+
+                                        <tr>
+                                            <td><t t-esc="appointments_count"/></td>
+                                            <td>
+                                                <t t-esc="line.appoiment_id"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="line.booking_date"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="line.state"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                    <!-- TOTAL -->
+                                    <tr class="font-weight-bold">
+                                        <td colspan="3" class="text-right">
+                                            Total Appointments
+                                        </td>
+                                        <td>
+                                            <t t-esc="appointments_count"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </t>
+                            <t t-foreach="o.tag_ids" t-as="tag">
+                                <p t-attf-style="background-color:#{tag.color_2};">
+                                    <span t-esc="tag.name"/>
+                                </p>
+
+                            </t>
+                    
+                    </div>
+                    
+                </t>
+            </t>
+        </t>
+
+    </template>
+</odoo>

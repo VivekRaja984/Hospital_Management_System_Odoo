@@ -1,0 +1,27 @@
+<odoo>
+    <record id="view_vivek_hospital_cancel_appoiment_wizard" model="ir.ui.view">
+        <field name="name">vivek_hospital.cancel_appoiment_wizard_view</field>
+        <field name="model">vivek.hospital.cancel.appoiment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cancel Appoiment">
+                <group>
+                    <field name="appointment_id" />
+                    <field name="date_cancel" />
+                    <field name="reason" />
+                </group>
+                <footer>
+                    <button string="Cancel Appoiment" type="object" name="action_cancel" class="btn-primary"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_vivek_hospital_cancel_appoiment_wizard" model="ir.actions.act_window">
+        <field name="name">Cancel Appoiment</field>
+        <field name="res_model">vivek.hospital.cancel.appoiment.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_vivek_hospital_cancel_appoiment_wizard"/>
+        <field name="target">new</field>
+
+    </record>
+</odoo>

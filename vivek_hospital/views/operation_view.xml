@@ -1,0 +1,44 @@
+<odoo>
+    <record id="view_vivek_hospital_operation_form_m" model="ir.ui.view">
+        <field name="name">vivek_hospital.operation_form</field>
+        <field name="model">vivek.hospital.operation</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="doctor_id"/>
+                        <field name="operation_name"/>
+                        <field name="ref_record"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+
+    </record>
+    <record id="view_vivek_hospital_operation_tree" model="ir.ui.view">
+        <field name="name">vivek_hospital.operation_tree</field>
+        <field name="model">vivek.hospital.operation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="doctor_id"/>
+                <field name="operation_name"/>
+            </tree>
+        </field>
+
+    </record>
+    <record id="action_vivek_hospital_operation" model="ir.actions.act_window">
+        <field name="name">Operation</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">vivek.hospital.operation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_smilling_face">
+                Click to create a new operation record.
+            </p>
+        </field>
+    </record>
+    <menuitem  id="menu_vivek_hospital_operation" 
+    name="Operation" 
+    parent="menu_vivek_hospital_configuration" 
+    action="action_vivek_hospital_operation" />
+</odoo>

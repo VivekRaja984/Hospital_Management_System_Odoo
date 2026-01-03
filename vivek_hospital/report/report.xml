@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="report_vivek_hospital_patient" model="ir.actions.report">
+        <field name="name">Patient Report</field>
+        <field name="model">vivek.hospital.patient</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">vivek_hospital.report_vivek_hospital_patient_template</field>
+        <field name="report_file">vivek_hospital.report_vivek_hospital_patient_template</field>
+        <field name="binding_model_id" ref="model_vivek_hospital_patient"/>
+        <field name="binding_type">report</field>
+
+    </record>
+</odoo>

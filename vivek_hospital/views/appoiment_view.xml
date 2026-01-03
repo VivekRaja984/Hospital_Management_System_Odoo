@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_mark_as_done" model="ir.actions.server">
+        <field name="name">Mark as Done</field>
+        <field name="model_id" ref="model_vivek_hospital_appoiment"/>
+        <field name="binding_model_id" ref="model_vivek_hospital_appoiment"/>
+        <field name="state">code</field>
+        <field name="code">
+            for record in records:
+                record.action_done()
+        </field>
+
+    </record>
+    <record id="view_vivek_hospital_appoiment_activity" model="ir.ui.view">
+        <field name="name">vivek_hospital.appoiment_activity</field>
+        <field name="model">vivek.hospital.appoiment</field>
+        <field name="arch" type="xml">
+           <activity string="Appoiment Activities">
+            <field name="patient_id"/>
+            <field name="ref"/>
+            <templates>
+                <div t-name="activity-box">
+                    <img t-att-src="activity_image('vivek.hospital.patient','image',record.patient_id.raw_value)" t-att-title="record.patient_id.value" t-att-alt="record.patient_id.value"/>
+                    <div>
+                        <field name="ref" display="full"/>
+                    </div>
+                </div>
+            </templates>
+            </activity>
+        </field>
+    </record>
+    <record id="view_vivek_hospital_appoiment_tree" model="ir.ui.view">
+        <field name="name">vivek_hospital.appoiment_tree</field>
+        <field name="model">vivek.hospital.appoiment</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state=='confirm'" decoration-danger="state=='cancel'" decoration-info="state=='draft'" decoration-warning="state=='done'" sample="true" multi_edit="true">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object"/>
+                </header>
+                <field name="appoiment_id"/>
+                <field name="patient_id"/>
+                <field name="gender"/>
+                <field name="appoiment_time" optional="show"/>
+                <field name="doctor_id" widget="many2one_avatar_user"/>
+                <field name="booking_date" optional="hide"/>
+                <field name="activity_ids" widget="list_activity"/>
+                <field name="ref"/>
+                <field name="state"
+                widget="badge"
+                decoration-success="state == 'confirm'"
+                decoration-danger="state == 'cancel'"
+                decoration-info="state == 'draft'"
+                decoration-warning="state == 'done'"/>
+                <button name="action_done" class="fa fa-check btn-success" 
+                type="object" attrs="{'invisible': [('state', '=', 'done')]}"/>
+                <button  name="%(vivek_hospital.action_vivek_hospital_cancel_appoiment_wizard)d"
+                class="fa fa-times" type="action"   
+                context="{'default_appointment_id': id}" attrs="{'invisible': [('state', 'in', ['cancel', 'draft'])]}" />
+                <groupby name="patient_id">
+                    <button name="edit" string="Edit" type="edit" class="oe_highlight"/>
+                </groupby>
+                <field name="progress" widget="progressbar"/>
+            </tree>
+            </field>
+    </record>
+    <record id="view_vivek_hospital_appoiment_calendar" model="ir.ui.view">
+        <field name="name">vivek_hospital.appoiment_calendar</field>
+        <field name="model">vivek.hospital.appoiment</field>
+        <field name="arch" type="xml">
+            <calendar string="Appoiment Calendar" date_start="booking_date" date_delay="duration" color="state" 
+            quick_add="False" mode="month" event_open_popup="True" event_limit="3">
+                <field name="patient_id" filters="1" avatar_field="1"/>
+                <field name="state" invisible="1" filters="1"/>
+            </calendar>
+        </field>
+
+    </record>
+    <record id="view_vivek_hospital_appoiment_form" model="ir.ui.view">
+        <field name="name">vivek_hospital.appoiment_form</field>
+        <field name="model">vivek.hospital.appoiment</field>
+        <field name="arch" type="xml">
+            <form>
+                 <header>
+                        <button name="action_send_confirmation_email" string="Send Confirmation Email" type="object" class="oe_highlight" />
+                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" states="draft" data-hotkey="shift+V"/>
+                        <button name="action_done" string="Done" type="object" class="oe_highlight" states="confirm" data-hotkey="D"/>
+                        <button  name="action_Reset_to_draft" string="Reset to Draft" type="object" class="oe_highlight" states="cancel,done" data-hotkey="R"/>
+                        <!-- <button  name="action_cancel" string="Cancel" type="object" class="oe_highlight" states="draft,confirm" data-hotkey="C"/> -->
+
+                        <button  name="%(vivek_hospital.action_vivek_hospital_cancel_appoiment_wizard)d" string="Cancel" type="action"  states="draft,confirm" data-hotkey="C" context="{'default_appointment_id': id}"/>
+                        <field name="state" widget="statusbar"  nolabel="1" statusbar_visible="draft,confirm,done"></field>
+                    </header>
+                <sheet>
+                   
+                    <div>
+                        <h1>
+                            <field name="appoiment_id"/>
+                        </h1>
+                        <h1>
+                            <field name="priority" widget="priority"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                           <field name="patient_id" widget="selection"/>
+                           <field  name="gender" default_focus="1"/>
+                           <field  name="doctor_id" widget="many2one_avatar_user"/>
+                           <button  name="action_test" string="Confirm" type="object" class="oe_highlight" 
+                            help="This is a action button it will print " confirm="are you sure?" groups="base.group_no_one"/>
+                           <button  name="%(vivek_hospital.action_vivek_hospital_patient)d" string="View Patient" type="action" class="oe_highlight" 
+                           confirm="Are you sure?" help="This is a action button it will redirected to patient form" groups="base.group_no_one"></button>
+                           <field name="company_id" groups="base.group_multi_company"/>
+                           <field name="currency_id" groups="base.group_multi_currency"/>
+                        </group>
+                        <group>
+                            <field name="hidden_sales_price" groups="base.group_no_one"/>
+                            <field name="appoiment_time" help="Select the appointment time"/>
+                           <field name="booking_date"/>
+                           <field name="ref" readonly="1" force_save="1"/>
+                           <field name="operation_id"/>
+                            <field name="duration"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Precscription" name="Precscription">
+                           <field name="prechription" options="{'collaborative':true,'resizable':true,'codeview':true}"/>
+                           <!-- <field name="prechription" widget="ace" options="{'mode':'python'}"/> -->
+                        </page>
+                        <page string="Pharmasy" name="Pharmacy">
+                            <field name="pharmacy_line_ids">
+                                <tree editable="bottom">
+                                    
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="price" attrs="{'column_invisible': [('parent.hidden_sales_price', '=', True)]}"
+                                     widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
+                                    <field name="company_currency_id" invisible="1"/>
+                                    <field name="price_subtotal" />
+                                    
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="product_id"/>
+                                        <field name="quantity"/>
+                                        <field name="price"/>
+                                        
+                                    </group>
+                                </form>
+                            </field>
+
+                        </page>
+                        <page string="Progress" name="Progress">
+                            <field name="progress" widget="gauge" options="{'style':'width: 200px; height:200px;'}"/>
+
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+     <record id="view_vivek_hospital_appoiment_search_ma" model="ir.ui.view">
+        <field name="name">vivek_hospital.appoiment_search</field>
+        <field name="model">vivek.hospital.appoiment</field>
+        <field name="arch" type="xml">
+            <search>
+                
+        
+            </search>
+            </field>
+    </record>
+    
+
+
+    <record id="action_vivek_hospital_appoiment" model="ir.actions.act_window">
+        <field name="name">appoiment</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">vivek.hospital.appoiment</field>
+        <field name="view_mode">tree,form,calendar,activity</field>
+        <field name="view_id" ref="view_vivek_hospital_appoiment_tree"/>
+        <field name="search_view_id" ref="view_vivek_hospital_appoiment_search_ma"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_smilling_face">
+                Click to create a new appoiment record.
+            </p>
+        </field>
+    </record>
+    
+    <menuitem  id="menu_vivek_hospital_adetails" 
+    name="Appoiments" 
+    parent="menu_vivek_hospital_appoiment" 
+    action="action_vivek_hospital_appoiment" />
+
+</odoo>

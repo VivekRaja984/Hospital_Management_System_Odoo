@@ -1,0 +1,18 @@
+<odoo>
+    <record id="squence_vivek_hospital_appoiment" model="ir.sequence">
+        <field name="name">Appoiment Sequence</field>
+        <field name="code">vivek.hospital.patient</field>
+        <field name="prefix">VH</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+
+    </record>
+    <record id="squence_vivek_hospital_Appoiment2" model="ir.sequence">
+        <field name="name">Appoiment2 Sequence</field>
+        <field name="code">vivek.hospital.appoiment</field>
+        <field name="prefix">AH</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+
+    </record>
+</odoo>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- FORM VIEW -->
+    <record id="view_form_code_executor" model="ir.ui.view">
+        <field name="name">hospital.code.executor.form</field>
+        <field name="model">hospital.code.executor</field>
+        <field name="arch" type="xml">
+            <form string="Code Executor">
+                <group>
+                        <field name="code" widget="ace" options="{'mode': 'python'}"/>
+                        <field name="result" readonly="1"/>
+                    </group>
+                    <footer>
+                        <button name="action_execute_test"
+                                type="object"
+                                string="Execute"
+                                class="btn-primary"/>
+                    </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_code_executor" model="ir.actions.act_window">
+        <field name="name">Code Executor</field>
+        <field name="res_model">hospital.code.executor</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_form_code_executor"/>
+        <field name="target">current</field>
+        <field name="context">{'default_code': '# write python code here'}</field>
+    </record>
+
+    <!-- MENU -->
+    <menuitem
+        id="menu_code_executor"
+        name="Code Executor"
+        parent="technical"
+        action="action_code_executor"
+        sequence="10"/>
+
+</odoo>

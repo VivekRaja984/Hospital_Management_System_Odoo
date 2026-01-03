@@ -1,0 +1,53 @@
+<odoo>
+     <record id="view_vivek_hospital_patient_tag_tree" model="ir.ui.view">
+        <field name="name">vivek_hospital.patient_tree_tag</field>
+        <field name="model">vivek.hospital.patient.tag</field>
+        <field name="arch" type="xml">
+            <tree sample="1">
+                <field name="name"/>
+                <field name="color" />
+                <field name="active" />
+            </tree>
+            </field>
+    </record>
+
+    <record id="view_vivek_hospital_patient_tag_form_m" model="ir.ui.view">
+        <field name="name">vivek_hospital.patient_tag_form</field>
+        <field name="model">vivek.hospital.patient.tag</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    
+                    <group>
+                        <group>
+                            <field name="name" string="Name" />
+                            <field name="sequence" string="Sequence" />
+                        </group> 
+                        <group>
+                            <field name="color" widget="color_picker"/>
+                            <field name="color_2" widget="color" groups="base.group_no_one"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_vivek_hospital_patient_tag" model="ir.actions.act_window">
+        <field name="name">Patient Tag</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">vivek.hospital.patient.tag</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_smilling_face">
+                Click to create a new patient tag record.
+            </p>
+        </field>
+    </record>
+    
+    <menuitem  id="menu_vivek_hospital_patient_tag" 
+    name="Patient Tags" 
+    parent="menu_vivek_hospital_configuration" 
+    action="action_vivek_hospital_patient_tag" />
+</odoo>

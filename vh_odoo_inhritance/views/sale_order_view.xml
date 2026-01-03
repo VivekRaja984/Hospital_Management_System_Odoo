@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+      <record id="view_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">vivek.hospital.appoiment</field>
+        <field name="inherit_id" ref="vivek_hospital.view_vivek_hospital_appoiment_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//field[@name='ref']" position="after">
+            <field name="confirmed_user_id"/>
+          </xpath>
+        </field>
+      </record>
+    </data>
+</odoo>

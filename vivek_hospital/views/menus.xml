@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="menu_vivek_hospital_root" 
+    name="Vivek Hospital Management" 
+    web_icon="vivek_hospital/static/description/icon.png"
+    sequence="0"/>
+    <menuitem id="menu_vivek_hospital_patient" 
+    name="Patients" 
+    parent="menu_vivek_hospital_root" />
+    <menuitem id="menu_vivek_hospital_appoiment" 
+    name="Appoiments" 
+    parent="menu_vivek_hospital_root" />
+    <menuitem 
+    id="menu_vivek_hospital_configuration" 
+    name="Configuration" 
+    parent="menu_vivek_hospital_root" />
+    <menuitem 
+    id="menu_vivek_hospital_cancel_appoiment_wizard" 
+    name="Cancel Appoiment Wizard" 
+    parent="menu_vivek_hospital_patient"
+    action="action_vivek_hospital_cancel_appoiment_wizard" />
+    <menuitem id="technical"
+    name="Technical"
+    groups="base.group_no_one"
+    parent="menu_vivek_hospital_root" />
+</odoo>
